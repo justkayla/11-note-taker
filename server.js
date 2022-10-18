@@ -2,7 +2,6 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const uuid = require('./helpers/uuid');
-const db = require('./db/db.json');
 const util = require('util');
 const readFileAsync = util.promisify(fs.readFile);
 const writeFileAsync = util.promisify(fs.writeFile);
@@ -27,7 +26,10 @@ app.get('/notes', (req, res) => {
 });
 
 // Reads the `db.json` file and returns all saved notes as JSON
-app.get('/api/notes', (req, res) => res.json(db));
+app.get('/api/notes', async (req, res) => {
+  const notes = await readFileAsync('./db/db.json', 'utf8');
+  res.send(notes);
+});
 
 // Receives new note to save on request body, adds it to `db.json` file, returns the new note to the client
 app.post('/api/notes', async (req, res) => {
@@ -66,15 +68,23 @@ app.post('/api/notes', async (req, res) => {
 });
 
 // Receives a query parameter containing id of note to delete, reads all notes in `db.json`, removes note with assigned `id`, rewrites notes to `db.json`
-app.delete('api/notes/:id', (req, res) => {
+app.delete('/api/notes/:id', async (req, res) => {
+  
   const selectedNote = req.params.id;
-  res.send("DELETE request called.")   
 
-//   for (let i = 0; i < db.length; i++) {
-//     if (selectedNote === db[i].id) {
-//       // DELETE NOTE
-//     }
-//   }
+  let noteData = await readFileAsync('./db/db.json', 'utf8');
+  let noteArray = JSON.parse(noteData);
+
+  for (let i = 0; i < noteArray.length; i++) {
+      if (selectedNote === noteArray[i].id) {
+        noteArray.splice(i)
+      }
+    }
+
+  let stringifiedNotes = JSON.stringify(noteArray);
+  await writeFileAsync('./db/db.json', stringifiedNotes);
+
+  res.send("DELETE request called.")
 });
 
 app.listen(PORT, () => {
