@@ -6,6 +6,9 @@ const util = require('util');
 const readFileAsync = util.promisify(fs.readFile);
 const writeFileAsync = util.promisify(fs.writeFile);
 
+// let noteData = await readFileAsync('./db/db.json', 'utf8');
+// let noteArray = JSON.parse(noteData);
+
 const PORT = process.env.PORT || 3001;
 const app = express();
 
@@ -77,7 +80,7 @@ app.delete('/api/notes/:id', async (req, res) => {
 
   for (let i = 0; i < noteArray.length; i++) {
       if (selectedNote === noteArray[i].id) {
-        noteArray.splice(i)
+        noteArray.splice(i, 1)
       }
     }
 
