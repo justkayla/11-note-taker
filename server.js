@@ -10,7 +10,6 @@ const app = express();
 // Sets up the Express app to handle data parsing
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
 // Add a static middleware for serving assets in the public folder
 app.use(express.static('public'));
 
@@ -43,7 +42,7 @@ app.post('/api/notes', (req, res) => {
       title,
       text  
     };
-        
+
     // Retrieve what data is already in `db.json`, assign it
     let noteData = fs.readFileSync('./db/db.json');
     // Parse the data from `db.json`, assign it
@@ -59,8 +58,11 @@ app.post('/api/notes', (req, res) => {
     status: 'success',
     body: note,
     };
-    console.log(response);
-  };    
+    console.log(response);  
+  };
+  // How to return note immediately upon saving/adding?
+  // What is the `+` versus `save` feature? Temp add versus store? How to handle?
+  return note;     
 });
 
 // Receives a query parameter containing id of note to delete, reads all notes in `db.json`, removes note with assigned `id`, rewrites notes to `db.json`
