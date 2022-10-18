@@ -30,7 +30,6 @@ app.get('/api/notes', (req, res) => res.json(db));
 
 // Receives new note to save on request body, adds it to `db.json` file, returns the new note to the client
 app.post('/api/notes', (req, res) => {
-  console.log(req.body);
   res.send("Received");
 
   // Destructuring assignment for the items in req.body
@@ -39,28 +38,30 @@ app.post('/api/notes', (req, res) => {
   // If all the required properties are present
   if (title && text) {
     // Variable for the object we will save
-    const newNote = {
+    const note = {
       id: uuid(),
       title,
       text  
-    };
+    }; 
+    
+    // Retrieve what data is already in `db.json`, assign it
+    let noteData = fs.readFileSync('./db/db.json');
+    // Parse the data from `db.json`, assign it
+    let noteArray = JSON.parse(noteData);
+    // push changes to array
+    noteArray.push(note)
+    
+    // Append the data to the `db.json` file  
+    let newNote = JSON.stringify(noteArray);
+    fs.writeFileSync('./db/db.json', newNote);
 
-    // Convert the data to a string so we can save it
-    const noteString = JSON.stringify(newNote);
-
-    // Append the data to the `db.json` file
-    fs.appendFile(`./db/db.json`, noteString, (err) =>
-      err ? console.log(err) : console.log('Note has been added to JSON file')    
-    );
-    // Want to append data to db, saved array already, use functions that are away of structured data
-
-    const response = {
-      status: 'success',
-      body: newNote,
-    };
-
-    console.log(response);
+    // Want to append data to db, saved array already, use functions that are aware of structured data
   }
+  const response = {
+  status: 'success',
+  body: newNote,
+  };
+  console.log(response);  
 });
 
 // Receives a query parameter containing id of note to delete, reads all notes in `db.json`, removes note with assigned `id`, rewrites notes to `db.json`
