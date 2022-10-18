@@ -42,8 +42,8 @@ app.post('/api/notes', (req, res) => {
       id: uuid(),
       title,
       text  
-    }; 
-    
+    };
+        
     // Retrieve what data is already in `db.json`, assign it
     let noteData = fs.readFileSync('./db/db.json');
     // Parse the data from `db.json`, assign it
@@ -54,14 +54,13 @@ app.post('/api/notes', (req, res) => {
     // Append the data to the `db.json` file  
     let newNote = JSON.stringify(noteArray);
     fs.writeFileSync('./db/db.json', newNote);
-
-    // Want to append data to db, saved array already, use functions that are aware of structured data
-  }
-  const response = {
-  status: 'success',
-  body: newNote,
-  };
-  console.log(response);  
+  
+    const response = {
+    status: 'success',
+    body: note,
+    };
+    console.log(response);
+  };    
 });
 
 // Receives a query parameter containing id of note to delete, reads all notes in `db.json`, removes note with assigned `id`, rewrites notes to `db.json`
