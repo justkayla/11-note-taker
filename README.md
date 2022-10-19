@@ -50,7 +50,7 @@ https://11-note-taker-production.up.railway.app/
 
 ## Screenshot
 
-Below is an in-process copy of my README.md generator.
+Below is are in-process screenshots of my Note Taker app.
 
 ![](screenshot1.png)
 ![](screenshot2.png)
