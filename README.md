@@ -58,4 +58,4 @@ Below is are in-process screenshots of my Note Taker app.
 
 ## Contributor
 
-Kayla Justice &copy;2022   
+Kayla Justice 2022   
